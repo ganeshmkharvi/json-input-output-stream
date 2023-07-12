@@ -152,14 +152,6 @@ namespace Utilities
                         }
                     }
 
-                    if (pItem.First.Type == JTokenType.Object)
-                    {
-                        if (pItem.Value.Type == JTokenType.Array)
-                        {
-                            obj.Add(pItem.Name, HandleNestedArray((JArray)pItem.Value));
-                        }
-                    }
-
                 }
             }
 
