@@ -2,12 +2,13 @@
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Linq;
+using Utilities.Interfaces;
 
 namespace Utilities
 {
-    public static class JsonHelper
+    public  class JsonHelper: IJsonHelper
     {
-        public static JObject OrderJsonProperties(JObject jsonObject)
+        public  JObject OrderJsonProperties(JObject jsonObject)
         {
             // Create a new JObject to store the reordered properties
             JObject reorderedObject = new JObject();
@@ -26,7 +27,7 @@ namespace Utilities
             return reorderedObject;
         }
 
-        private static void HandleObject(JObject jsonObject, JObject reorderedObject)
+        private  void HandleObject(JObject jsonObject, JObject reorderedObject)
         {
             // Move the complex object properties to the new JObject
             foreach (JProperty property in jsonObject.Properties())
@@ -40,7 +41,7 @@ namespace Utilities
             }
         }
         
-        private static void HandlePrimitiveTypes(JObject jsonObject, JObject reorderedObject)
+        private  void HandlePrimitiveTypes(JObject jsonObject, JObject reorderedObject)
         {
             // Move the primitive properties to the new JObject
             foreach (JProperty property in jsonObject.Properties())
@@ -50,7 +51,7 @@ namespace Utilities
             }
         }
 
-        private static JObject AddArrayData(JProperty property)
+        private  JObject AddArrayData(JProperty property)
         {
             JObject obj = new JObject();
 
@@ -81,7 +82,7 @@ namespace Utilities
             return obj;
         }
 
-        private static JArray HandleNestedArray(JArray array)
+        private  JArray HandleNestedArray(JArray array)
         {
             JArray arr = new JArray();
             foreach (var arItem in array)
@@ -91,7 +92,7 @@ namespace Utilities
             return arr;
         }
 
-        private static JObject HandleArray(JToken item)
+        private  JObject HandleArray(JToken item)
         {
             JObject obj = new JObject();
             var prop = (JObject)item;
@@ -132,7 +133,7 @@ namespace Utilities
             return obj;
         }
 
-        public static JObject FileToJObject(IFormFile file)
+        public  JObject FileToJObject(IFormFile file)
         {
             string fileContent = null;
             using (var reader = new StreamReader(file.OpenReadStream()))

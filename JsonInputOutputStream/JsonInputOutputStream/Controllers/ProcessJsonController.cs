@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using Utilities;
+using Utilities.Interfaces;
 
 namespace JsonInputOutputStream.Controllers
 {
@@ -14,12 +15,18 @@ namespace JsonInputOutputStream.Controllers
     {
         private const string ContentType = "application/json";
         private const string Extension = ".json";
+        private readonly IJsonHelper _jsonHelper;
+
+        public ProcessJsonController(IJsonHelper jsonHelper)
+        {
+            _jsonHelper = jsonHelper;
+        }
 
         [HttpPost]
         public FileStreamResult Post(IFormFile file)
         {
-            JObject jsonData = JsonHelper.FileToJObject(file);
-            JObject reorderedObject = JsonHelper.OrderJsonProperties(jsonData);
+            JObject jsonData = _jsonHelper.FileToJObject(file);
+            JObject reorderedObject = _jsonHelper.OrderJsonProperties(jsonData);
             return StringToFile(reorderedObject.ToString(), $"{Guid.NewGuid()}{Extension}", ContentType);
         }
 
