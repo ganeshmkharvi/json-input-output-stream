@@ -11,37 +11,14 @@ namespace Utilities
         {
             // Create a new JObject to store the reordered properties
             JObject reorderedObject = new JObject();
-
-            // Move the primitive properties to the new JObject
-            foreach (JProperty property in jsonObject.Properties())
-            {
-                if (property.Value.Type != JTokenType.Object && property.Value.Type != JTokenType.Array)
-                    reorderedObject.Add(property.Name, property.Value);
-            }
-
-            // Move the complex object properties to the new JObject
-            foreach (JProperty property in jsonObject.Properties())
-            {
-                if (property.Value.Type == JTokenType.Object)
-                {
-                    var data = OrderJsonProperties((JObject)property.Value);
-                    if (property.Value.Type == JTokenType.Array)
-                    {
-                        reorderedObject = data;
-                    }
-                    else
-                    {
-                        reorderedObject.Add(property.Name, data);
-                    }
-                }
-
-            }
+            HandlePrimitiveTypes(jsonObject, reorderedObject);
+            HandleObject(jsonObject, reorderedObject);
 
             foreach (JProperty property in jsonObject.Properties())
             {
                 if (property.Value.Type == JTokenType.Array)
                 {
-                    var arrdata = AddArrayData(reorderedObject, property);
+                    var arrdata = AddArrayData(property);
                     reorderedObject.Add(property.Name, arrdata.First.FirstOrDefault());
                 }
             }
@@ -49,7 +26,31 @@ namespace Utilities
             return reorderedObject;
         }
 
-        private static JObject AddArrayData(JObject reorderedObject, JProperty property)
+        private static void HandleObject(JObject jsonObject, JObject reorderedObject)
+        {
+            // Move the complex object properties to the new JObject
+            foreach (JProperty property in jsonObject.Properties())
+            {
+                if (property.Value.Type == JTokenType.Object)
+                {
+                    reorderedObject.Add(property.Name, OrderJsonProperties((JObject)property.Value));
+
+                }
+
+            }
+        }
+        
+        private static void HandlePrimitiveTypes(JObject jsonObject, JObject reorderedObject)
+        {
+            // Move the primitive properties to the new JObject
+            foreach (JProperty property in jsonObject.Properties())
+            {
+                if (property.Value.Type != JTokenType.Object && property.Value.Type != JTokenType.Array)
+                    reorderedObject.Add(property.Name, property.Value);
+            }
+        }
+
+        private static JObject AddArrayData(JProperty property)
         {
             JObject obj = new JObject();
 
@@ -94,30 +95,19 @@ namespace Utilities
         {
             JObject obj = new JObject();
             var prop = (JObject)item;
-            foreach (var pItem in prop.Properties())
-            {
-                if (pItem.Value.Type != JTokenType.Object && pItem.Value.Type != JTokenType.Array)
-                {
-                    obj.Add(pItem.Name, pItem.Value);
-                }
-            }
-            foreach (var pItem in prop.Properties())
-            {
-                if (pItem.Value.Type == JTokenType.Object)
-                {
-                    obj.Add(pItem.Name, OrderJsonProperties((JObject)pItem.Value));
-                }
-            }
+        
+            HandlePrimitiveTypes(prop, obj);
+            HandleObject(prop, obj);
 
-            foreach (var pItem in (prop).Properties())
+            foreach (var pItem in prop.Properties())
             {
                 if (pItem.Value.Type == JTokenType.Array)
                 {
 
                     if (pItem.First.Type == JTokenType.Array)
                     {
-                        if (pItem.First.FirstOrDefault().Type != JTokenType.Object &&
-                            pItem.First.FirstOrDefault().Type != JTokenType.Array)
+                        if (pItem?.First?.FirstOrDefault()?.Type != JTokenType.Object &&
+                            pItem?.First?.FirstOrDefault()?.Type != JTokenType.Array)
                         {
                             obj.Add(pItem.Name, pItem.Value);
                         }
