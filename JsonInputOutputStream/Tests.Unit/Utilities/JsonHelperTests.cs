@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Moq;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using Utilities;
@@ -10,6 +9,8 @@ namespace Tests.Unit.Utilities
 {
     public class JsonHelperTests
     {
+        #region Tests
+
         [Fact(DisplayName = "WHEN input is a json file " +
                             "THEN a JObject is returned")]
         public void FileToJObject_Success()
@@ -49,6 +50,8 @@ namespace Tests.Unit.Utilities
 
             Assert.True(((JProperty)reorderedObject.Last).Name.Equals("carts"));
         }
+
+        #endregion Tests
 
         #region private methods
 

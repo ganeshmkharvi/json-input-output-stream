@@ -10,8 +10,10 @@ namespace Utilities
     /// 
     /// </summary>
     /// <seealso cref="Utilities.Interfaces.IJsonHelper" />
-    public class JsonHelper: IJsonHelper
+    public class JsonHelper : IJsonHelper
     {
+        #region public methods
+
         /// <summary>
         /// Orders the json properties.
         /// </summary>
@@ -35,6 +37,27 @@ namespace Utilities
 
             return reorderedObject;
         }
+
+        /// <summary>
+        /// Files to j object.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        public JObject FileToJObject(IFormFile file)
+        {
+            string fileContent = null;
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            {
+                fileContent = reader.ReadToEnd();
+            }
+
+            // Parse the JSON string into a JObject
+            return JObject.Parse(fileContent);
+        }
+
+        #endregion public methods
+
+        #region private methods
 
         /// <summary>
         /// Handles the object.
@@ -130,7 +153,7 @@ namespace Utilities
         {
             JObject obj = new JObject();
             var prop = (JObject)item;
-        
+
             HandlePrimitiveTypes(prop, obj);
             HandleObject(prop, obj);
 
@@ -159,22 +182,6 @@ namespace Utilities
             return obj;
         }
 
-        /// <summary>
-        /// Files to j object.
-        /// </summary>
-        /// <param name="file">The file.</param>
-        /// <returns></returns>
-        public JObject FileToJObject(IFormFile file)
-        {
-            string fileContent = null;
-            using (var reader = new StreamReader(file.OpenReadStream()))
-            {
-                fileContent = reader.ReadToEnd();
-            }
-
-            // Parse the JSON string into a JObject
-            return JObject.Parse(fileContent);
-        }
-
+        #endregion private methods
     }
 }
