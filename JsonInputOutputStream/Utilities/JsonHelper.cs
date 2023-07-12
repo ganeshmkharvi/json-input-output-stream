@@ -6,9 +6,18 @@ using Utilities.Interfaces;
 
 namespace Utilities
 {
-    public  class JsonHelper: IJsonHelper
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Utilities.Interfaces.IJsonHelper" />
+    public class JsonHelper: IJsonHelper
     {
-        public  JObject OrderJsonProperties(JObject jsonObject)
+        /// <summary>
+        /// Orders the json properties.
+        /// </summary>
+        /// <param name="jsonObject">The json object.</param>
+        /// <returns></returns>
+        public JObject OrderJsonProperties(JObject jsonObject)
         {
             // Create a new JObject to store the reordered properties
             JObject reorderedObject = new JObject();
@@ -27,7 +36,12 @@ namespace Utilities
             return reorderedObject;
         }
 
-        private  void HandleObject(JObject jsonObject, JObject reorderedObject)
+        /// <summary>
+        /// Handles the object.
+        /// </summary>
+        /// <param name="jsonObject">The json object.</param>
+        /// <param name="reorderedObject">The reordered object.</param>
+        private void HandleObject(JObject jsonObject, JObject reorderedObject)
         {
             // Move the complex object properties to the new JObject
             foreach (JProperty property in jsonObject.Properties())
@@ -40,8 +54,13 @@ namespace Utilities
 
             }
         }
-        
-        private  void HandlePrimitiveTypes(JObject jsonObject, JObject reorderedObject)
+
+        /// <summary>
+        /// Handles the primitive types.
+        /// </summary>
+        /// <param name="jsonObject">The json object.</param>
+        /// <param name="reorderedObject">The reordered object.</param>
+        private void HandlePrimitiveTypes(JObject jsonObject, JObject reorderedObject)
         {
             // Move the primitive properties to the new JObject
             foreach (JProperty property in jsonObject.Properties())
@@ -51,7 +70,12 @@ namespace Utilities
             }
         }
 
-        private  JObject AddArrayData(JProperty property)
+        /// <summary>
+        /// Adds the array data.
+        /// </summary>
+        /// <param name="property">The property.</param>
+        /// <returns></returns>
+        private JObject AddArrayData(JProperty property)
         {
             JObject obj = new JObject();
 
@@ -82,7 +106,12 @@ namespace Utilities
             return obj;
         }
 
-        private  JArray HandleNestedArray(JArray array)
+        /// <summary>
+        /// Handles the nested array.
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <returns></returns>
+        private JArray HandleNestedArray(JArray array)
         {
             JArray arr = new JArray();
             foreach (var arItem in array)
@@ -92,7 +121,12 @@ namespace Utilities
             return arr;
         }
 
-        private  JObject HandleArray(JToken item)
+        /// <summary>
+        /// Handles the array.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        private JObject HandleArray(JToken item)
         {
             JObject obj = new JObject();
             var prop = (JObject)item;
@@ -133,7 +167,12 @@ namespace Utilities
             return obj;
         }
 
-        public  JObject FileToJObject(IFormFile file)
+        /// <summary>
+        /// Files to j object.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        public JObject FileToJObject(IFormFile file)
         {
             string fileContent = null;
             using (var reader = new StreamReader(file.OpenReadStream()))
